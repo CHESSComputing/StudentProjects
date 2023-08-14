@@ -35,8 +35,7 @@ Fields that will require manual input:
     - All 4 fields above are optional -- we can leave them out for now.
   - Sample[CommonName|UnitCell|SpaceGroup|Geometry|MatPedHeatTreatment|MatPedProcessingRoute], MaterialSafetyHazardousSamples
     - Requires manual input, not optional.
-    - However: could make them optional? Ask KS & AD if this is OK for now.
-
+    - Parameters that imply crystallinity: make these optional?
 Unsure:
 - Alignment
   - For tomo: always false
@@ -46,9 +45,10 @@ Unsure:
   - For tomo: always false
 - [Beam|Pre|Gurard]Slit[Horizontal|Vertical][Size|Position] (12 fields total)
   - NB: No "Pre" slit at 3A! Schema should be updated -- only 8 fields total
+  - There may be a "Pre" slit in the future -- ask VK: better to update the schema now _and_ later, or set "Pre" slit values to a dummy value for now? 
   - Get these from transforming the individual blade motor positions: at id3a, account for slit box & individual blades (the usual slit macro motors are not used here).
 - Monochromator
-  - Can be determined from within SPEC -- ask KS & AD what to use
+  - Can be determined from within SPEC by examining whuch motors are defined. Helper macro can be made to turn this into a global var.
 - Focusing
   - Optional & N/A for tomo -- use "None"
 - Atten[Material|Thickness]
@@ -66,6 +66,7 @@ Unsure:
 - MechanicalTest
   - Intent needs clarification: is this tomo scan _part_ of a mech. test?
   - If _part_ of a mech. test -> true, set at the level of `newsample`
+  - Clarification: *yes* -- if this tomo scan _part_ of a mech. test, then "MechanicalTest" should be "true".
 - MechanicalTestType
   - For tomo: leave as empty string
   - set at the level of `newsample`
@@ -73,7 +74,23 @@ Unsure:
   - Even if not doing a mech test, sample could still be mounted in a load frame.
   - set at the level of `newuser`
 - MechanicalGrips
+  - manually set at the level of `newsample`
 - SupplementaryTechnique
+  - manually set at the level of `newsample`
 - Furnace
+  - manually set at the level of `newuserid`
 - Processing
+  - manually set at the level of `newuserid`
 - Calibration
+  - manually set at the level of `newsample`
+
+
+How to capture metadata on the scan-by-scan level:
+- all scan-by-scan metadata can be found automatically -- no need to interrupt the user's workflow
+
+When to submit records:
+- immediately when a record can be constructed -- attach it to _head, not _tail.
+
+Next steps 2023-08-11:
+- Make sure id3a's spec macros repo is up to date
+- Start editing macros
